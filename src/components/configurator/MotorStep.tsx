@@ -18,7 +18,7 @@ interface MotorStepProps {
 }
 
 
-const CARD_W = 188
+const CARD_W = 240
 
 export default function MotorStep({ value, onChange, color, extras, onDropdownChange, motorOptions = staticMotorOptions }: MotorStepProps) {
   const [open, setOpen] = useState(false)
@@ -147,7 +147,7 @@ export default function MotorStep({ value, onChange, color, extras, onDropdownCh
 
         {/* Dropdown panel */}
         <div
-          className="absolute inset-0 flex items-start justify-center pt-10 px-5 pointer-events-none"
+          className="absolute inset-0 flex items-start justify-center pt-4 px-5 pointer-events-none"
           style={{
             opacity: open ? 1 : 0,
             transform: open ? 'translateY(0)' : 'translateY(-10px)',

@@ -119,7 +119,7 @@ export default function PolsterStep({
 
         {/* Polster dropdown */}
         <div
-          className="absolute inset-0 flex items-start justify-center pt-10 px-5"
+          className="absolute inset-0 flex items-start justify-center pt-4 px-5"
           style={{
             opacity: openPanel === 'polster' ? 1 : 0,
             transform: openPanel === 'polster' ? 'translateY(0)' : 'translateY(-10px)',
@@ -155,7 +155,7 @@ export default function PolsterStep({
 
         {/* Farbe dropdown */}
         <div
-          className="absolute inset-0 flex items-start justify-center pt-10 px-5"
+          className="absolute inset-0 flex items-start justify-center pt-4 px-5"
           style={{
             opacity: openPanel === 'farbe' ? 1 : 0,
             transform: openPanel === 'farbe' ? 'translateY(0)' : 'translateY(-10px)',
