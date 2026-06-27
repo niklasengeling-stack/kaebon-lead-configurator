@@ -163,7 +163,7 @@ export default function PolsterStep({
             pointerEvents: openPanel === 'farbe' ? 'auto' : 'none',
           }}
         >
-          <div className="w-full max-w-xs flex flex-col divide-y divide-black/[0.07] border border-black/[0.08] rounded-2xl overflow-hidden bg-white shadow-[0_8px_40px_rgba(0,0,0,0.10)]">
+          <div className="w-full max-w-xs flex flex-col divide-y divide-black/[0.07] border border-black/[0.08] rounded-2xl overflow-y-auto bg-white shadow-[0_8px_40px_rgba(0,0,0,0.10)]" style={{ maxHeight: 'calc(100dvh - 260px)', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
             {polsterFarbeOptions.map((farbe) => {
               const selected = polsterFarbe === farbe.id
               return (
