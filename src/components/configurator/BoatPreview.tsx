@@ -6,7 +6,7 @@ import type { ColorId, ExtraId, MotorId } from '@/types/configurator'
 import { getBoatImagePath } from '@/lib/boatImage'
 import { cn } from '@/lib/utils'
 
-const DURATION = 700
+const DURATION = 600
 
 interface BoatPreviewProps {
   motor: MotorId | null
@@ -65,7 +65,7 @@ export default function BoatPreview({
             key={`from-${fromSrc}-${transKey}`}
             className="absolute inset-0"
             style={{
-              animation: `boat-fade-out ${DURATION}ms cubic-bezier(0.4,0,1,1) forwards`,
+              animation: `boat-fade-out ${DURATION}ms cubic-bezier(0.4,0,0.2,1) forwards`,
             }}
           >
             <Image

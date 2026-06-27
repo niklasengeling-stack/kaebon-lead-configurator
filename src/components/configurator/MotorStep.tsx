@@ -16,13 +16,6 @@ interface MotorStepProps {
   onDropdownChange: (open: boolean) => void
 }
 
-function ChevronDown({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="6 9 12 15 18 9" />
-    </svg>
-  )
-}
 
 const CARD_W = 188
 
@@ -75,15 +68,26 @@ export default function MotorStep({ value, onChange, color, extras, onDropdownCh
   return (
     <div className="flex-1 flex flex-col">
       {/* Header */}
-      <div className="h-[88px] shrink-0 flex flex-col items-center justify-center gap-2 border-b border-black/[0.06]">
+      <div className="h-[88px] shrink-0 flex flex-col items-center justify-center gap-2.5 border-b border-black/[0.06]">
         <p className="text-[10px] tracking-[0.45em] uppercase text-neutral-400">Motorisierung</p>
-        <button
-          onClick={() => setOpen((v) => !v)}
-          className="flex items-center gap-2 text-[16px] font-medium tracking-[0.06em] text-black transition-opacity duration-150 hover:opacity-50 active:opacity-30"
-        >
-          {selectedLabel ?? 'Auswählen'}
-          <ChevronDown className={cn('w-3.5 h-3.5 transition-transform duration-300', open && 'rotate-180')} />
-        </button>
+        {selectedLabel ? (
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="h-8 px-5 rounded-full bg-black text-white text-[11px] tracking-[0.08em] font-medium hover:opacity-70 active:scale-[0.97] transition-all duration-150"
+          >
+            {selectedLabel}
+          </button>
+        ) : (
+          <button
+            onClick={() => setOpen((v) => !v)}
+            className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center hover:opacity-70 active:scale-[0.97] transition-all duration-150"
+            aria-label="Motor auswählen"
+          >
+            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+          </button>
+        )}
       </div>
 
       {/* Content zone */}

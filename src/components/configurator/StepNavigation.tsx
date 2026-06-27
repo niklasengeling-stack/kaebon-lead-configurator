@@ -33,7 +33,7 @@ export default function StepNavigation({
       {onBack ? (
         <button
           onClick={onBack}
-          className="flex items-center gap-1 h-[56px] px-2 text-[11px] tracking-[0.2em] uppercase text-neutral-300 hover:text-black transition-colors duration-200 select-none"
+          className="flex items-center gap-1 h-[56px] px-2 text-[11px] tracking-[0.2em] uppercase text-neutral-500 hover:text-black transition-colors duration-200 select-none"
         >
           <ChevronLeft className="w-3.5 h-3.5 shrink-0" />
           {backLabel}

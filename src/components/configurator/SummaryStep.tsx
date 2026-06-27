@@ -31,7 +31,7 @@ export default function SummaryStep({ configuration }: SummaryStepProps) {
     .filter(Boolean) as string[]
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="flex-1 min-h-0 flex flex-col">
       {/* Header */}
       <div className="h-[88px] shrink-0 flex flex-col items-center justify-center gap-1.5 border-b border-black/[0.06]">
         <p className="text-[10px] tracking-[0.45em] uppercase text-neutral-400">
@@ -52,7 +52,7 @@ export default function SummaryStep({ configuration }: SummaryStepProps) {
       />
 
       {/* Spec rows */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 min-h-0 overflow-y-auto" style={{ WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
         <div className="w-full max-w-sm mx-auto px-5 pb-4">
           <SummaryRow
             label="Motorisierung"

@@ -24,6 +24,7 @@
 .DS_Store
 ._*
 *.pem
+*.xmp
 
 # debug
 npm-debug.log*

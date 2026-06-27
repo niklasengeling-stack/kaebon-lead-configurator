@@ -37,14 +37,14 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Boat image crossfade — simultaneous blur dissolve */
+/* Boat image crossfade — clean opacity dissolve */
 @keyframes boat-fade-in {
-  from { opacity: 0; filter: blur(12px); transform: scale(1.015); }
-  to   { opacity: 1; filter: blur(0px);  transform: scale(1); }
+  from { opacity: 0; transform: scale(1.012); }
+  to   { opacity: 1; transform: scale(1); }
 }
 @keyframes boat-fade-out {
-  from { opacity: 1; filter: blur(0px);  transform: scale(1); }
-  to   { opacity: 0; filter: blur(12px); transform: scale(0.985); }
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.994); }
 }
 
 body {

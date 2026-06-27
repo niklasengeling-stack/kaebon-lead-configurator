@@ -162,21 +162,32 @@ export default function ConfiguratorShell() {
           {/* Desktop video — landscape 16:9, hidden on mobile */}
           <video
             autoPlay muted loop playsInline
+            poster="/start-poster.webp"
             className="hidden md:block absolute inset-0 w-full h-full object-cover"
           >
+            <source src="/start-video.webm" type="video/webm" />
             <source src="/start-video.mp4" type="video/mp4" />
           </video>
 
           {/* Mobile video — portrait 9:16, hidden on desktop */}
           <video
             autoPlay muted loop playsInline
+            poster="/start-poster-mobile.webp"
             className="md:hidden absolute inset-0 w-full h-full object-cover"
           >
+            <source src="/start-video-mobile.webm" type="video/webm" />
             <source src="/start-video-mobile.mp4" type="video/mp4" />
           </video>
 
-          {/* Dark fallback (shows when video not yet loaded) */}
-          <div className="absolute inset-0 bg-neutral-900" style={{ zIndex: -1 }} />
+          {/* Fallback — shown when video can't play at all */}
+          <div
+            className="absolute inset-0 bg-neutral-900 bg-cover bg-center hidden md:block"
+            style={{ zIndex: -1, backgroundImage: 'url(/start-poster.webp)' }}
+          />
+          <div
+            className="absolute inset-0 bg-neutral-900 bg-cover bg-center md:hidden"
+            style={{ zIndex: -1, backgroundImage: 'url(/start-poster-mobile.webp)' }}
+          />
 
           {/* Gradient overlay — darkens top and bottom for text legibility */}
           <div
