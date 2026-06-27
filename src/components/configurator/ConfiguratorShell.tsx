@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import type { ColorId, ExtraId, MotorId, PolsterId, PolsterFarbeId } from '@/types/configurator'
-import { boatModel } from '@/data/boatModel'
+import { boatModel as staticBoatModel, type BoatModel } from '@/data/boatModel'
 import type { ContactSchema } from '@/lib/leadSchema'
 import type { fetchAllOptions } from '@/lib/fetchOptions'
 
@@ -48,6 +48,10 @@ export default function ConfiguratorShell({ options }: { options: Options }) {
   // Video start screen state
   const [startOverlayVisible, setStartOverlayVisible] = useState(true)
   const [startOverlayMounted, setStartOverlayMounted] = useState(true)
+  const [activeBoatIndex, setActiveBoatIndex] = useState(0)
+
+  const boats: BoatModel[] = options.boats ?? [staticBoatModel]
+  const activeBoat = boats[activeBoatIndex] ?? boats[0]
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleDropdownChange = useCallback((_open: boolean) => {}, [])
@@ -176,96 +180,90 @@ export default function ConfiguratorShell({ options }: { options: Options }) {
 
   return (
     <>
-      {/* ── Video start screen overlay ── */}
+      {/* ── Start screen overlay ── */}
       {startOverlayMounted && (
         <div
-          className="fixed inset-0 z-50 flex flex-col"
+          className="fixed inset-0 z-50 flex flex-col overflow-hidden"
           style={{
             opacity: startOverlayVisible ? 1 : 0,
             transition: 'opacity 750ms cubic-bezier(0.22,1,0.36,1)',
             pointerEvents: startOverlayVisible ? 'auto' : 'none',
           }}
         >
-          {/* Desktop video — landscape 16:9, hidden on mobile */}
-          <video
-            autoPlay muted loop playsInline
-            poster="/start-poster.webp"
-            className="hidden md:block absolute inset-0 w-full h-full object-cover"
-          >
-            <source src="/start-video.webm" type="video/webm" />
-            <source src="/start-video.mp4" type="video/mp4" />
-          </video>
-
-          {/* Mobile video — portrait 9:16, hidden on desktop */}
-          <video
-            autoPlay muted loop playsInline
-            poster="/start-poster-mobile.webp"
-            className="md:hidden absolute inset-0 w-full h-full object-cover"
-          >
-            <source src="/start-video-mobile.webm" type="video/webm" />
-            <source src="/start-video-mobile.mp4" type="video/mp4" />
-          </video>
-
-          {/* Fallback — shown when video can't play at all */}
+          {/* Slides — one per boat, horizontally arranged */}
           <div
-            className="absolute inset-0 bg-neutral-900 bg-cover bg-center hidden md:block"
-            style={{ zIndex: -1, backgroundImage: 'url(/start-poster.webp)' }}
-          />
-          <div
-            className="absolute inset-0 bg-neutral-900 bg-cover bg-center md:hidden"
-            style={{ zIndex: -1, backgroundImage: 'url(/start-poster-mobile.webp)' }}
-          />
-
-          {/* Gradient overlay — darkens top and bottom for text legibility */}
-          <div
-            className="absolute inset-0 pointer-events-none"
+            className="flex h-full"
             style={{
-              background:
-                'linear-gradient(to bottom, rgba(0,0,0,0.52) 0%, transparent 28%, transparent 55%, rgba(0,0,0,0.62) 100%)',
+              width: `${boats.length * 100}%`,
+              transform: `translateX(-${(activeBoatIndex * 100) / boats.length}%)`,
+              transition: 'transform 600ms cubic-bezier(0.22,1,0.36,1)',
             }}
-          />
-
-          {/* Content */}
-          <div
-            className="relative flex flex-col h-full"
-            style={{ paddingBottom: 'max(36px, env(safe-area-inset-bottom))' }}
           >
-            {/* Logo — white version via CSS filter */}
-            <div
-              className="flex flex-col items-center gap-2 pt-10"
-              style={{ animation: 'fade-up 900ms cubic-bezier(0.22,1,0.36,1) 100ms both' }}
-            >
-              <Image
-                src="/kaebon-logo.svg"
-                alt="Kaebon"
-                width={172}
-                height={37}
-                priority
-                className="brightness-0 invert"
-              />
-              <span className="text-[7.5px] font-medium tracking-[0.65em] text-white/50 uppercase pl-[0.65em]">
-                Konfigurator
-              </span>
+            {boats.map((boat) => (
+              <div key={boat.id} className="relative flex-shrink-0 flex flex-col" style={{ width: `${100 / boats.length}%` }}>
+                {/* Desktop video */}
+                <video autoPlay muted loop playsInline poster={boat.posterDesktop}
+                  className="hidden md:block absolute inset-0 w-full h-full object-cover">
+                  <source src={boat.videoDesktop?.replace('.mp4', '.webm')} type="video/webm" />
+                  <source src={boat.videoDesktop} type="video/mp4" />
+                </video>
+                {/* Mobile video */}
+                <video autoPlay muted loop playsInline poster={boat.posterMobile}
+                  className="md:hidden absolute inset-0 w-full h-full object-cover">
+                  <source src={boat.videoMobile?.replace('.mp4', '.webm')} type="video/webm" />
+                  <source src={boat.videoMobile} type="video/mp4" />
+                </video>
+                {/* Fallback */}
+                <div className="absolute inset-0 bg-neutral-900 bg-cover bg-center hidden md:block" style={{ zIndex: -1, backgroundImage: `url(${boat.posterDesktop})` }} />
+                <div className="absolute inset-0 bg-neutral-900 bg-cover bg-center md:hidden" style={{ zIndex: -1, backgroundImage: `url(${boat.posterMobile})` }} />
+                {/* Gradient */}
+                <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.52) 0%, transparent 28%, transparent 55%, rgba(0,0,0,0.62) 100%)' }} />
+              </div>
+            ))}
+          </div>
+
+          {/* UI layer — always on top */}
+          <div className="absolute inset-0 flex flex-col pointer-events-none">
+            {/* Logo */}
+            <div className="flex flex-col items-center gap-2 pt-10 pointer-events-auto"
+              style={{ animation: 'fade-up 900ms cubic-bezier(0.22,1,0.36,1) 100ms both' }}>
+              <Image src="/kaebon-logo.svg" alt="Kaebon" width={172} height={37} priority className="brightness-0 invert" />
+              <span className="text-[7.5px] font-medium tracking-[0.65em] text-white/50 uppercase pl-[0.65em]">Konfigurator</span>
             </div>
 
-            {/* Spacer */}
             <div className="flex-1" />
 
-            {/* Bottom content — model name + CTAs */}
-            <div className="flex flex-col items-center gap-5 px-5">
-              <div
-                className="text-center"
-                style={{ animation: 'fade-up 900ms cubic-bezier(0.22,1,0.36,1) 350ms both' }}
-              >
-                <h1 className="text-[12px] tracking-[0.5em] uppercase text-white/70">
-                  {boatModel.shortName}
+            {/* Boat name + CTA */}
+            <div className="flex flex-col items-center gap-5 px-5 pointer-events-auto"
+              style={{ paddingBottom: 'max(36px, env(safe-area-inset-bottom))' }}>
+
+              <div className="text-center" style={{ animation: 'fade-up 900ms cubic-bezier(0.22,1,0.36,1) 350ms both' }}>
+                <h1 className="text-[22px] md:text-[28px] font-light tracking-[0.2em] uppercase text-white leading-tight">
+                  {activeBoat.name}
                 </h1>
               </div>
 
-              <div
-                className="flex flex-col items-center gap-3 w-full max-w-[300px]"
-                style={{ animation: 'fade-up 900ms cubic-bezier(0.22,1,0.36,1) 500ms both' }}
-              >
+              {/* Dot indicators — only when multiple boats */}
+              {boats.length > 1 && (
+                <div className="flex items-center gap-2">
+                  {boats.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveBoatIndex(i)}
+                      className="transition-all duration-300"
+                      style={{
+                        width: i === activeBoatIndex ? 20 : 6,
+                        height: 6,
+                        borderRadius: 3,
+                        backgroundColor: i === activeBoatIndex ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.35)',
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+
+              <div className="flex flex-col items-center gap-3 w-full max-w-[300px]"
+                style={{ animation: 'fade-up 900ms cubic-bezier(0.22,1,0.36,1) 500ms both' }}>
                 <button
                   onClick={handleConfigure}
                   className="w-full h-[52px] rounded-full bg-white text-black text-[11px] font-medium tracking-[0.25em] uppercase hover:bg-neutral-100 active:scale-[0.98] transition-all duration-200"

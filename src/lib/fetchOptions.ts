@@ -1,4 +1,5 @@
 import { supabase } from './supabase'
+import { boatModel as staticBoatModel, type BoatModel } from '@/data/boatModel'
 import { motorOptions as staticMotors } from '@/data/motorOptions'
 import { colorOptions as staticColors } from '@/data/colorOptions'
 import { extraOptions as staticExtras } from '@/data/extraOptions'
@@ -76,13 +77,33 @@ export async function fetchPolsterFarbeOptions(): Promise<PolsterFarbeOption[]> 
   }))
 }
 
+export async function fetchBoatModels(): Promise<BoatModel[]> {
+  if (!supabase) return [staticBoatModel]
+  const { data, error } = await supabase
+    .from('boat_models')
+    .select('*')
+    .eq('active', true)
+    .order('sort_order')
+  if (error || !data?.length) return [staticBoatModel]
+  return data.map((r) => ({
+    id: r.id,
+    name: r.name,
+    shortName: r.short_name,
+    posterDesktop: r.poster_desktop ?? '/start-poster.webp',
+    posterMobile: r.poster_mobile ?? '/start-poster-mobile.webp',
+    videoDesktop: r.video_desktop ?? '/start-video.mp4',
+    videoMobile: r.video_mobile ?? '/start-video-mobile.mp4',
+  }))
+}
+
 export async function fetchAllOptions() {
-  const [motors, colors, extras, polster, polsterFarben] = await Promise.all([
+  const [boats, motors, colors, extras, polster, polsterFarben] = await Promise.all([
+    fetchBoatModels(),
     fetchMotorOptions(),
     fetchColorOptions(),
     fetchExtraOptions(),
     fetchPolsterOptions(),
     fetchPolsterFarbeOptions(),
   ])
-  return { motors, colors, extras, polster, polsterFarben }
+  return { boats, motors, colors, extras, polster, polsterFarben }
 }

@@ -3,6 +3,14 @@
 -- Nach schema.sql ausführen
 -- ============================================================
 
+-- Boat models
+insert into boat_models (id, name, short_name, poster_desktop, poster_mobile, video_desktop, video_mobile, sort_order) values
+  ('eb-eins-classic', 'Elektroboot Eins Classic', 'EB Eins Classic', '/start-poster.webp', '/start-poster-mobile.webp', '/start-video.mp4', '/start-video-mobile.mp4', 1)
+on conflict (id) do update set
+  name = excluded.name,
+  short_name = excluded.short_name,
+  sort_order = excluded.sort_order;
+
 -- Motor options
 insert into motor_options (id, label, description, image_url, sort_order) values
   ('torqeedo-1-6', 'Torqeedo 1.6kW',          'Leise und effizient. Ideal für ruhige Seen und entspannte Ausfahrten im Nahbereich.',                                   '/options/motors/torqeedo-1-6.webp', 1),
