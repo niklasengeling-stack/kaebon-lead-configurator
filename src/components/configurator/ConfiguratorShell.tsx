@@ -234,7 +234,7 @@ export default function ConfiguratorShell({ options }: { options: Options }) {
             {/* Boat name — vertically centered */}
             <div className="flex-1 flex items-center justify-center px-5 pointer-events-auto">
               <div className="text-center" style={{ animation: 'fade-up 900ms cubic-bezier(0.22,1,0.36,1) 350ms both' }}>
-                <h1 className="text-[22px] md:text-[28px] font-light tracking-[0.2em] uppercase text-white leading-tight">
+                <h1 className="text-[22px] md:text-[28px] font-medium tracking-[0.2em] uppercase text-white leading-tight">
                   {activeBoat.name}
                 </h1>
               </div>
