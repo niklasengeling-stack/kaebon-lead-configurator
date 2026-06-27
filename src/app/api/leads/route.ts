@@ -9,6 +9,8 @@ const configurationSchema = z.object({
   motor: z.string().min(1, 'Motor required'),
   color: z.string().min(1, 'Color required'),
   extras: z.array(z.string()).default([]),
+  polster: z.array(z.string()).default([]),
+  polsterFarbe: z.string().nullable().default(null),
 })
 
 const requestSchema = z.object({
@@ -72,6 +74,8 @@ export async function POST(request: Request) {
         motor: configuration.motor as LeadPayload['configuration']['motor'],
         color: configuration.color as LeadPayload['configuration']['color'],
         extras: configuration.extras as LeadPayload['configuration']['extras'],
+        polster: configuration.polster as LeadPayload['configuration']['polster'],
+        polsterFarbe: configuration.polsterFarbe as LeadPayload['configuration']['polsterFarbe'],
       },
       contact,
       submittedAt: new Date().toISOString(),

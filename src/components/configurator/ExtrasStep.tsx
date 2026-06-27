@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import type { ColorId, ExtraId, MotorId } from '@/types/configurator'
-import { extraOptions, type ExtraOption } from '@/data/extraOptions'
+import { extraOptions as staticExtraOptions, type ExtraOption } from '@/data/extraOptions'
 import BoatPreview from './BoatPreview'
 import OptionDetailSheet from './OptionDetailSheet'
 import { cn } from '@/lib/utils'
@@ -14,12 +14,13 @@ interface ExtrasStepProps {
   motor: MotorId | null
   color: ColorId | null
   onDropdownChange: (open: boolean) => void
+  extraOptions?: ExtraOption[]
 }
 
 
 const CARD_W = 188
 
-export default function ExtrasStep({ value, onChange, motor, color, onDropdownChange }: ExtrasStepProps) {
+export default function ExtrasStep({ value, onChange, motor, color, onDropdownChange, extraOptions = staticExtraOptions }: ExtrasStepProps) {
   const [open, setOpen] = useState(false)
   const [hoveredOption, setHoveredOption] = useState<ExtraOption | null>(null)
   const [sheetOption, setSheetOption] = useState<ExtraOption | null>(null)

@@ -7,11 +7,26 @@ export type ExtraId =
   | 'sonnensegel'
   | 'bordelektrik'
   | 'led-navigation'
+export type PolsterId =
+  | 'cockpitpolster'
+  | 'soziuspolster'
+  | 'sonnenliegepolster'
+  | 'bordwandpolster'
+export type PolsterFarbeId =
+  | 'diamante-mineral'
+  | 'diamante-perla'
+  | 'diamante-coral'
+  | 'diamante-celeste'
+  | 'diamante-grafito'
+  | 'diamante-taupe'
+  | 'diamante-pirita'
 
 export interface Configuration {
   motor: MotorId | null
   color: ColorId | null
   extras: ExtraId[]
+  polster: PolsterId[]
+  polsterFarbe: PolsterFarbeId | null
 }
 
 export interface ContactData {

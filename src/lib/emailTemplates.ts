@@ -62,9 +62,17 @@ export function buildSalesEmailHtml(lead: LeadPayload): string {
                 <td style="padding:10px 0;font-size:12px;color:#888;">Farbton</td>
                 <td style="padding:10px 0;font-size:13px;font-weight:600;color:#000;">${config.farbton}</td>
               </tr>
-              <tr>
+              <tr style="border-bottom:1px solid #f0f0f0;">
                 <td style="padding:10px 0;font-size:12px;color:#888;">Extras</td>
                 <td style="padding:10px 0;font-size:13px;font-weight:600;color:#000;">${config.extras}</td>
+              </tr>
+              <tr style="border-bottom:1px solid #f0f0f0;">
+                <td style="padding:10px 0;font-size:12px;color:#888;">Polster</td>
+                <td style="padding:10px 0;font-size:13px;font-weight:600;color:#000;">${config.polster}</td>
+              </tr>
+              <tr>
+                <td style="padding:10px 0;font-size:12px;color:#888;">Polsterfarbe</td>
+                <td style="padding:10px 0;font-size:13px;font-weight:600;color:#000;">${config.polsterFarbe}</td>
               </tr>
             </table>
           </td>
@@ -134,6 +142,8 @@ KONFIGURATION · ELEKTROBOOT EINS CLASSIC
 Motorisierung  ${config.motorisierung}
 Farbton        ${config.farbton}
 Extras         ${config.extras}
+Polster        ${config.polster}
+Polsterfarbe   ${config.polsterFarbe}
 
 KONTAKTDATEN
 -----------------------------------------

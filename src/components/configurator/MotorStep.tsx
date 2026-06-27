@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import type { ColorId, ExtraId, MotorId } from '@/types/configurator'
-import { motorOptions, type MotorOption } from '@/data/motorOptions'
+import { motorOptions as staticMotorOptions, type MotorOption } from '@/data/motorOptions'
 import BoatPreview from './BoatPreview'
 import OptionDetailSheet from './OptionDetailSheet'
 import { cn } from '@/lib/utils'
@@ -14,12 +14,13 @@ interface MotorStepProps {
   color: ColorId | null
   extras: ExtraId[]
   onDropdownChange: (open: boolean) => void
+  motorOptions?: MotorOption[]
 }
 
 
 const CARD_W = 188
 
-export default function MotorStep({ value, onChange, color, extras, onDropdownChange }: MotorStepProps) {
+export default function MotorStep({ value, onChange, color, extras, onDropdownChange, motorOptions = staticMotorOptions }: MotorStepProps) {
   const [open, setOpen] = useState(false)
   const [hoveredOption, setHoveredOption] = useState<MotorOption | null>(null)
   const [sheetOption, setSheetOption] = useState<MotorOption | null>(null)

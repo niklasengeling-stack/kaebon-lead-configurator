@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import type { ColorId, ExtraId, MotorId } from '@/types/configurator'
-import { colorOptions } from '@/data/colorOptions'
+import { colorOptions as staticColorOptions, type ColorOption } from '@/data/colorOptions'
 import BoatPreview from './BoatPreview'
 import { cn } from '@/lib/utils'
 
@@ -11,6 +11,7 @@ interface ColorStepProps {
   onChange: (color: ColorId) => void
   motor: MotorId | null
   extras: ExtraId[]
+  colorOptions?: ColorOption[]
 }
 
 function ChevronLeft({ className }: { className?: string }) {
@@ -28,7 +29,7 @@ function ChevronRight({ className }: { className?: string }) {
   )
 }
 
-export default function ColorStep({ value, onChange, motor, extras }: ColorStepProps) {
+export default function ColorStep({ value, onChange, motor, extras, colorOptions = staticColorOptions }: ColorStepProps) {
   useEffect(() => {
     if (!value) onChange(colorOptions[0].id)
   // eslint-disable-next-line react-hooks/exhaustive-deps

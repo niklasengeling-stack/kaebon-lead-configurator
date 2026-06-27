@@ -3,28 +3,32 @@
 import { useCallback, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import type { ColorId, ExtraId, MotorId } from '@/types/configurator'
+import type { ColorId, ExtraId, MotorId, PolsterId, PolsterFarbeId } from '@/types/configurator'
 import { boatModel } from '@/data/boatModel'
 import type { ContactSchema } from '@/lib/leadSchema'
+import type { fetchAllOptions } from '@/lib/fetchOptions'
 
 import KaebonLogo from './KaebonLogo'
 import MotorStep from './MotorStep'
 import ColorStep from './ColorStep'
 import ExtrasStep from './ExtrasStep'
+import PolsterStep from './PolsterStep'
 import SummaryStep from './SummaryStep'
 import ContactStep, { type ContactStepHandle } from './ContactStep'
 import StepNavigation from './StepNavigation'
 
-type Screen = 'start' | 'motor' | 'farbe' | 'extras' | 'zusammenfassung' | 'kontakt'
+type Screen = 'start' | 'motor' | 'farbe' | 'extras' | 'polster' | 'zusammenfassung' | 'kontakt'
 const SCREEN_ORDER: Screen[] = [
-  'start', 'motor', 'farbe', 'extras', 'zusammenfassung', 'kontakt',
+  'start', 'motor', 'farbe', 'extras', 'polster', 'zusammenfassung', 'kontakt',
 ]
 
 const TRANSITION_MS = 580
 const EASING_ENTER = 'cubic-bezier(0.22, 1, 0.36, 1)'
 const EASING_LEAVE = 'cubic-bezier(0.4, 0, 1, 1)'
 
-export default function ConfiguratorShell() {
+type Options = Awaited<ReturnType<typeof fetchAllOptions>>
+
+export default function ConfiguratorShell({ options }: { options: Options }) {
   const router = useRouter()
   const contactRef = useRef<ContactStepHandle>(null)
   const leaveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -37,6 +41,8 @@ export default function ConfiguratorShell() {
   const [motor, setMotor] = useState<MotorId | null>(null)
   const [color, setColor] = useState<ColorId | null>(null)
   const [extras, setExtras] = useState<ExtraId[]>([])
+  const [polster, setPolster] = useState<PolsterId[]>([])
+  const [polsterFarbe, setPolsterFarbe] = useState<PolsterFarbeId | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
   // Video start screen state
@@ -85,7 +91,7 @@ export default function ConfiguratorShell() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          configuration: { motor, color, extras },
+          configuration: { motor, color, extras, polster, polsterFarbe },
           contact: contactData,
         }),
       })
@@ -114,11 +120,12 @@ export default function ConfiguratorShell() {
             color={color}
             extras={extras}
             onDropdownChange={handleDropdownChange}
+            motorOptions={options.motors}
           />
         )
       case 'farbe':
         return (
-          <ColorStep value={color} onChange={setColor} motor={motor} extras={extras} />
+          <ColorStep value={color} onChange={setColor} motor={motor} extras={extras} colorOptions={options.colors} />
         )
       case 'extras':
         return (
@@ -128,10 +135,30 @@ export default function ConfiguratorShell() {
             motor={motor}
             color={color}
             onDropdownChange={handleDropdownChange}
+            extraOptions={options.extras}
+          />
+        )
+      case 'polster':
+        return (
+          <PolsterStep
+            polster={polster}
+            polsterFarbe={polsterFarbe}
+            onPolsterChange={setPolster}
+            onFarbeChange={setPolsterFarbe}
+            motor={motor}
+            color={color}
+            extras={extras}
+            polsterOptions={options.polster}
+            polsterFarbeOptions={options.polsterFarben}
           />
         )
       case 'zusammenfassung':
-        return <SummaryStep configuration={{ motor, color, extras }} />
+        return (
+          <SummaryStep
+            configuration={{ motor, color, extras, polster, polsterFarbe }}
+            options={options}
+          />
+        )
       case 'kontakt':
         return <ContactStep ref={contactRef} onSubmit={handleContactSubmit} />
     }
@@ -288,6 +315,7 @@ export default function ConfiguratorShell() {
             nextDisabled={
               (screen === 'motor' && motor === null) ||
               (screen === 'farbe' && color === null) ||
+              (screen === 'polster' && polster.length > 0 && polsterFarbe === null) ||
               submitting
             }
             nextFormId={screen === 'kontakt' ? 'contact-form' : undefined}
