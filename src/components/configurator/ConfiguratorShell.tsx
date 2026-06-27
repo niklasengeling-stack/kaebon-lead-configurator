@@ -231,19 +231,19 @@ export default function ConfiguratorShell({ options }: { options: Options }) {
               <span className="text-[7.5px] font-medium tracking-[0.65em] text-white/50 uppercase pl-[0.65em]">Konfigurator</span>
             </div>
 
-            <div className="flex-1" />
-
-            {/* Boat name + CTA */}
-            <div className="flex flex-col items-center gap-5 px-5 pointer-events-auto"
-              style={{ paddingBottom: 'max(36px, env(safe-area-inset-bottom))' }}>
-
+            {/* Boat name — vertically centered */}
+            <div className="flex-1 flex items-center justify-center px-5 pointer-events-auto">
               <div className="text-center" style={{ animation: 'fade-up 900ms cubic-bezier(0.22,1,0.36,1) 350ms both' }}>
                 <h1 className="text-[22px] md:text-[28px] font-light tracking-[0.2em] uppercase text-white leading-tight">
                   {activeBoat.name}
                 </h1>
               </div>
+            </div>
 
-              {/* Dot indicators — only when multiple boats */}
+            {/* Bottom — dot indicators + CTA */}
+            <div className="flex flex-col items-center gap-4 px-5 pointer-events-auto"
+              style={{ paddingBottom: 'max(36px, env(safe-area-inset-bottom))' }}>
+
               {boats.length > 1 && (
                 <div className="flex items-center gap-2">
                   {boats.map((_, i) => (
@@ -262,7 +262,7 @@ export default function ConfiguratorShell({ options }: { options: Options }) {
                 </div>
               )}
 
-              <div className="flex flex-col items-center gap-3 w-full max-w-[300px]"
+              <div className="flex flex-col items-center w-full max-w-[300px]"
                 style={{ animation: 'fade-up 900ms cubic-bezier(0.22,1,0.36,1) 500ms both' }}>
                 <button
                   onClick={handleConfigure}
